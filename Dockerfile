@@ -7,4 +7,5 @@ RUN wget -q https://storage.googleapis.com/kubernetes-release/release/$(wget -q 
 RUN chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 RUN mkdir -p ~/.kube
 RUN npm config set registry http://registry.npmjs.org/
+RUN npm config set strict-ssl false
 RUN node --version
