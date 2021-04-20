@@ -9,4 +9,5 @@ RUN mkdir -p ~/.kube
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 RUN node --version
+COPY daemon.json /etc/docker/daemon.json
 RUN cat /etc/docker/daemon.json
