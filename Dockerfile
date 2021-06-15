@@ -1,6 +1,6 @@
 FROM docker:latest
 
-RUN apk --update add python3 py3-pip nodejs npm \
+RUN apk --update add python3 py3-pip nodejs npm trivy \
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir --upgrade awscli
 RUN apk add --no-cache bash git openssh lftp gzip openjdk11
