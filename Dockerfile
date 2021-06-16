@@ -14,6 +14,4 @@ RUN apk add --no-cache --virtual .curl curl \
         && TRIVY_VERSION=0.18.3 \
         && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v$TRIVY_VERSION \
     && trivy -v \
-    && trivy -debug filesystem --exit-code 1 --no-progress / \
     && apk del .curl \
-    && :
