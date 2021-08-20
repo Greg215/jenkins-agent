@@ -74,6 +74,13 @@ spec:
                 stage('Build And Push Image') {
                     build_push_image("${ecr_repo}")
                 }
+
+                stage('Clean Up the server') {
+                    sh 'docker image prune -a -f'
+                    sh 'docker system prune -a -f'
+                    sh 'docker image ls'
+                    sh 'df -h'
+                }
             }
 
             stage('Notify Complete') {
