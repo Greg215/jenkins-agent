@@ -25,7 +25,7 @@ int getChangeSetOnLocalFolder(String input){
 def build_info = "Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}."
 
 def build_push_image(ecr_repo) {
-    sh "docker build --network=host -t jenkins-agent:helm-${env.BUILD_NUMBER} -f Dockerfile_helm"
+    sh "docker build --network=host -t jenkins-agent:helm-${env.BUILD_NUMBER} -f Dockerfile_helm ."
     sh 'docker image ls'
 
     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws"
