@@ -24,15 +24,13 @@ int getChangeSetOnLocalFolder(String input){
 
 def build_info = "Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}."
 
-def build_push_image(ecr_repo, aws_region) {
+def build_push_image(ecr_repo) {
     sh "docker build --network=host -t jenkins-agent:iac-${env.BUILD_NUMBER} ."
     sh 'docker image ls'
-//    docker.withRegistry("https://${ecr_repo}/jenkins-agent", "ecr:${aws_region}:aws-secret-key") {
 
     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws"
     sh "docker tag jenkins-agent:iac-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
     sh "docker push ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
-//    }
 }
 
 podTemplate(label: label, yaml: """
@@ -74,13 +72,12 @@ spec:
                 }
 
                 stage('Build And Push Image') {
-                    build_push_image("${ecr_repo}", "${aws_region}")
+                    build_push_image("${ecr_repo}")
                 }
-
             }
 
             stage('Notify Complete') {
-                slackSend channel: "${notify_channel}", color: "good", message: "Finish the new Jenkins agent image."
+                slackSend channel: "${notify_channel}", color: "good", message: "Finish the new General Jenkins agent image tag: iac-${env.BUILD_NUMBER}."
             }
         }
     }
