@@ -25,12 +25,12 @@ int getChangeSetOnLocalFolder(String input){
 def build_info = "Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}."
 
 def build_push_image(ecr_repo) {
-    sh "docker build --network=host -t jenkins-agent:iac-${env.BUILD_NUMBER} ."
+    sh "docker build --network=host -t jenkins-agent:helm-${env.BUILD_NUMBER} -f Dockerfile_helm"
     sh 'docker image ls'
 
     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws"
-    sh "docker tag jenkins-agent:iac-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
-    sh "docker push ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
+    sh "docker tag jenkins-agent:helm-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:helm-${env.BUILD_NUMBER}"
+    sh "docker push ${ecr_repo}/jenkins-agent:helm-${env.BUILD_NUMBER}"
 }
 
 podTemplate(label: label, yaml: """
@@ -63,7 +63,7 @@ spec:
         ])
         withAWS(credentials: 'aws-secret-key', region: "${aws_region}") {
             stage('Notify Start') {
-                slackSend channel: "${notify_channel}", color: "warning", message: "Start to build jenkins-agent IaC image. ${build_info} (<${env.BUILD_URL}|see details>)"
+                slackSend channel: "${notify_channel}", color: "warning", message: "Start to build jenkins-agent helm image. ${build_info} (<${env.BUILD_URL}|see details>)"
             }
 
             container('jenkins-agent') {
@@ -77,7 +77,7 @@ spec:
             }
 
             stage('Notify Complete') {
-                slackSend channel: "${notify_channel}", color: "good", message: "Finish the new General Jenkins agent image tag: iac-${env.BUILD_NUMBER}."
+                slackSend channel: "${notify_channel}", color: "good", message: "Finish the new General Jenkins agent image tag: helm-${env.BUILD_NUMBER}."
             }
         }
     }
