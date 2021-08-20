@@ -27,12 +27,12 @@ def build_info = "Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}."
 def build_push_image(ecr_repo, aws_region) {
     sh "docker build --network=host -t jenkins-agent:iac-${env.BUILD_NUMBER} ."
     sh 'docker image ls'
-    docker.withRegistry("https://${ecr_repo}/jenkins-agent", "ecr:us-east-1:aws-secret-key") {
+//    docker.withRegistry("https://${ecr_repo}/jenkins-agent", "ecr:${aws_region}:aws-secret-key") {
 
-//    sh "aws ecr-public get-login-password --region ${aws_region} | docker login --username AWS --password-stdin public.ecr.aws"
-        sh "docker tag jenkins-agent:iac-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
-        sh "docker push ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
-    }
+    sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws"
+    sh "docker tag jenkins-agent:iac-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
+    sh "docker push ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
+//    }
 }
 
 podTemplate(label: label, yaml: """
