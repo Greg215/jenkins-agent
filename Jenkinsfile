@@ -27,7 +27,7 @@ def build_info = "Job: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}."
 def build_push_image(ecr_repo, aws_region) {
     sh "docker build --network=host -t jenkins-agent:iac-${env.BUILD_NUMBER} ."
     sh 'docker image ls'
-    docker.withRegistry("https://${ecr_repo}/jenkins-agent", "ecr:${aws_region}:aws-secret-key") {
+    docker.withRegistry("${ecr_repo}/jenkins-agent", "ecr:${aws_region}:aws-secret-key") {
         sh "docker tag jenkins-agent:iac-${env.BUILD_NUMBER} ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
         sh "docker push ${ecr_repo}/jenkins-agent:iac-${env.BUILD_NUMBER}"
     }
