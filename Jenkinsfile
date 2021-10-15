@@ -3,7 +3,7 @@
 def notify_channel = "#jenkins-notify"
 def label = "jenkins-vg-agent"
 def aws_region = "ap-southeast-1"
-def ecr_repo = "public.ecr.aws/d2n9w0q9"
+def ecr_repo = "public.ecr.aws/vision-ecr"
 
 if(currentBuild.getPreviousBuild()){
     env.PREVIOUS_BUILD_RESULT = currentBuild.getPreviousBuild().getResult()
