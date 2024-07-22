@@ -10,9 +10,4 @@ RUN mkdir -p ~/.kube
 RUN node --version
 RUN java --version
 
-RUN apk add --no-cache --virtual .curl curl \
-        && TRIVY_VERSION=0.18.3 \
-        && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v$TRIVY_VERSION \
-    && trivy -v
-
 RUN apk --no-cache add curl
